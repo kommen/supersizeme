@@ -91,9 +91,9 @@ SupersizeMe = Class.create({
           this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
         } else {
           clearInterval(this.slideshowInterval);
-          // TODO update play/pause button
         }
         this.paused = !this.paused;
+        $('pauseplay').down('img').src = this.paused ? 'images/play_dull.gif' : 'images/pause_dull.gif';
         return false;
      }.bind(this));
   },
