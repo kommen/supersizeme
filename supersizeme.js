@@ -42,7 +42,7 @@ SupersizeMe = Class.create({
     $('content').show();
 
     if (this.element.select('.activeslide').length == 0) {
-      slide = this.element.down('a').addClassName('activeslide');
+      var slide = this.element.down('a').addClassName('activeslide');
       slide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) })
     }
 
