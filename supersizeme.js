@@ -48,7 +48,7 @@ SupersizeMe = Class.create({
         $('slidecounter').down('.slidenumber').update(1);
         $('slidecounter').down('.totalslides').update(this.slides.length);
       }
-      this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+      this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
     }
   },
 
@@ -58,8 +58,8 @@ SupersizeMe = Class.create({
          return false;
 
        clearInterval(this.slideshowInterval);
-       this.nextslide();
-       this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+       this.nextSlide();
+       this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
        return false;
      }.bind(this));
 
@@ -69,7 +69,7 @@ SupersizeMe = Class.create({
 
        clearInterval(this.slideshowInterval);
        this.previousSlide();
-       this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+       this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
        return false;
      }.bind(this));
 
@@ -78,7 +78,7 @@ SupersizeMe = Class.create({
          return false;
 
         if (this.paused) {
-          this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+          this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
         } else {
           clearInterval(this.slideshowInterval);
           // TODO update play/pause button
@@ -112,7 +112,7 @@ SupersizeMe = Class.create({
     return false;
   },
 
-  nextslide: function() {
+  nextSlide: function() {
     this.switchSlide('next');
   },
   
