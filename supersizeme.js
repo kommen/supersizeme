@@ -10,7 +10,18 @@ SupersizeMe = Class.create({
   initialize: function(element, options) {
     this.element = $(element);
 
-    this.options = options;
+    this.options = Object.extend({
+      startWidth: 640,
+      startHeight: 480,
+      verticalCenter: true,
+      slideShow: true,
+      navigation: true,
+      transition: 'crossfade',
+      duration: 3,
+      slideCounter: true,
+      slideCaptions: true,
+      slideInterval: 3000
+    }, options);
 
     this.animating  = false;
     this.paused = false;
@@ -95,7 +106,7 @@ SupersizeMe = Class.create({
     var currentImage = this.element.down('.activeslide img');
     var viewportWidth = document.viewport.getDimensions().width, viewportHeight = document.viewport.getDimensions().height;
 
-    if ((viewportHeight/viewportWidth) > ratio){
+    if ((viewportHeight/viewportWidth) > ratio) {
         this.element.setStyle({ width: viewportHeight / ratio + 'px', height: viewportHeight + 'px'})
         currentImage.height = viewportHeight;
         currentImage.width = viewportWidth / ratio;
