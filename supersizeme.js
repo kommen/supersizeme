@@ -68,7 +68,7 @@ SupersizeMe = Class.create({
          return false;
 
        clearInterval(this.slideshowInterval);
-       this.prevslide();
+       this.previousSlide();
        this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
        return false;
      }.bind(this));
@@ -113,14 +113,22 @@ SupersizeMe = Class.create({
   },
 
   nextslide: function() {
+    this.switchSlide('next');
+  },
+  
+  previousSlide: function() {
+    this.switchSlide('previous');
+  },
+  
+  switchSlide: function (direction) {
     if (this.animating)
       return false;
 
     this.animating = true;
 
     var prevSlide    = this.element.down('a.activeslide').removeClassName('activeslide');
-    var currentSlide = prevSlide.next()     || this.slides.first();
-    var nextSlide    = currentSlide.next()  || this.slides.first();
+    var currentSlide = prevSlide[direction]()     || this.slides[direction == 'next' ? 'first' : 'last']();
+    var nextSlide    = currentSlide[direction]()  || this.slides[direction == 'next' ? 'first' : 'last']();
 
     if (this.options.slideCounter) {
       $('slidecounter').down('.slidenumber').update(this.slides.indexOf(currentSlide) + 1);
