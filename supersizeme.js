@@ -1,0 +1,148 @@
+/*!
+ *  supersizeme version 0.1
+ *  (c) 2009 Dieter Komendera, abloom OG, abloom.at
+ *
+ *  supersizeme is freely distributable under the terms of an MIT-style license.
+ *  inspired by supersized (http://www.buildinternet.com/project/supersized/)
+ *----------------------------------------------------------------------------------*/
+
+SupersizeMe = Class.create({
+  initialize: function(element, options) {
+    this.element = $(element);
+
+    this.options = options;
+
+    this.animating  = false;
+    this.paused = false;
+
+    this.slides = this.element.select('a');
+
+    this.slides.invoke('hide');
+    this.registerEvents();
+  },
+
+  registerEvents: function() {
+    document.observe('dom:loaded', this.onLoad.bind(this));
+    document.observe('ready', this.resizeNow.bind(this));
+    Event.observe(window, 'resize', this.resizeNow.bind(this));
+  },
+
+  onLoad: function(event) {
+    $('loading').hide();
+    this.element.show();
+    $('content').show();
+
+    if (this.element.select('.activeslide').length == 0)
+      this.element.down('a').addClassName('activeslide');
+
+    if (this.options.slideCaptions)
+      $('slidecaption').update(this.element.down('.activeslide').down('img').readAttribute('title'));
+
+    if (this.options.navigation)
+      this.initNaviation();
+    else
+      $('navigation').hide();
+
+    if (this.options.slideShow) {
+      if (this.options.slideCounter) {
+        $('slidecounter').down('.slidenumber').update(1);
+        $('slidecounter').down('.totalslides').update(this.slides.length);
+      }
+      this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+    }
+  },
+
+  initNaviation: function() {
+     $('nextslide').observe('click', function(event) {
+       if(this.paused || this.animating)
+         return false;
+
+       clearInterval(this.slideshowInterval);
+       this.nextslide();
+       this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+       return false;
+     }.bind(this));
+
+     $('prevslide').observe('click', function(event) {
+       if(this.paused || this.animating)
+         return false;
+
+       clearInterval(this.slideshowInterval);
+       this.prevslide();
+       this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+       return false;
+     }.bind(this));
+
+     $('pauseplay').observe('click', function(event) {
+       if (this.animating)
+         return false;
+
+        if (this.paused) {
+          this.slideshowInterval = setInterval(this.nextslide.bind(this), this.options.slideInterval);
+        } else {
+          clearInterval(this.slideshowInterval);
+          // TODO update play/pause button
+        }
+        this.paused = !this.paused;
+        return false;
+     }.bind(this));
+  },
+
+  resizeNow: function() {
+    var ratio = this.options.startHeight/this.options.startWidth;
+    var currentImage = this.element.select('.activeslide').first().down('img');
+    var viewportWidth = document.viewport.getDimensions().width, viewportHeight = document.viewport.getDimensions().height;
+
+    if ((viewportHeight/viewportWidth) > ratio){
+        this.element.setStyle({ width: viewportHeight + 'px', height: viewportHeight / ratio + 'px'})
+        currentImage.height = viewportHeight;
+        currentImage.width = viewportWidth / ratio;
+    } else {
+        this.element.setStyle({ width: viewportWidth + 'px', height: viewportWidth * ratio + 'px'})
+        currentImage.height = viewportWidth * ratio;
+        currentImage.width = viewportWidth;
+    }
+
+    if (this.options.verticalCenter) {
+      currentImage.setStyle({
+        left: (viewportWidth - this.element.getWidth())  / 2 + 'px',
+        top: (viewportHeight - this.element.getHeight()) / 2 + 'px'
+      });
+    }
+    return false;
+  },
+
+  nextslide: function() {
+    if (this.animating)
+      return false;
+
+    this.animating = true;
+
+    var prevSlide    = this.element.down('a.activeslide').removeClassName('activeslide');
+    var currentSlide = prevSlide.next()     || this.slides.first();
+    var nextSlide    = currentSlide.next()  || this.slides.first();
+
+    if (this.options.slideCounter) {
+      $('slidecounter').down('.slidenumber').update(this.slides.indexOf(currentSlide) + 1);
+    }
+
+    // missing, add/remove class .prevslide
+
+    if (this.options.slideCaptions)
+      $('slidecaption').update(currentSlide.down('img').readAttribute('title'));
+
+    currentSlide.addClassName('activeslide');
+
+    // TODO: more options here
+    switch(this.options.transition) {
+      case 'crossfade':
+        prevSlide.fade({ duration: this.options.duration });
+        currentSlide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) });
+        break;
+      default:
+        prevSlide.hide();
+        currentSlide.show();
+    }
+    this.resizeNow();
+  }
+});
