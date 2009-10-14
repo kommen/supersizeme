@@ -87,9 +87,6 @@ SupersizeMe = Class.create({
      }.bind(this));
 
      $('pauseplay').observe('click', function(event) {
-       if (this.animating)
-         return false;
-
         if (this.paused) {
           this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
         } else {
