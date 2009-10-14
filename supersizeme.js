@@ -96,7 +96,7 @@ SupersizeMe = Class.create({
     var viewportWidth = document.viewport.getDimensions().width, viewportHeight = document.viewport.getDimensions().height;
 
     if ((viewportHeight/viewportWidth) > ratio){
-        this.element.setStyle({ width: viewportHeight + 'px', height: viewportHeight / ratio + 'px'})
+        this.element.setStyle({ width: viewportHeight / ratio + 'px', height: viewportHeight + 'px'})
         currentImage.height = viewportHeight;
         currentImage.width = viewportWidth / ratio;
     } else {
