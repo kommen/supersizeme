@@ -14,26 +14,28 @@ SupersizeMe = Class.create({
 
     this.animating  = false;
     this.paused = false;
-
     this.slides = this.element.select('a');
 
-    this.slides.invoke('hide');
+    this.slides.invoke('setOpacity', 0);
     this.registerEvents();
   },
 
   registerEvents: function() {
     document.observe('dom:loaded', this.onLoad.bind(this));
-    document.observe('ready', this.resizeNow.bind(this));
     Event.observe(window, 'resize', this.resizeNow.bind(this));
   },
 
   onLoad: function(event) {
-    $('loading').hide();
+    $('loading').fade();
     this.element.show();
     $('content').show();
 
-    if (this.element.select('.activeslide').length == 0)
-      this.element.down('a').addClassName('activeslide');
+    if (this.element.select('.activeslide').length == 0) {
+      slide = this.element.down('a').addClassName('activeslide');
+      slide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) })
+    }
+
+    this.resizeNow();
 
     if (this.options.slideCaptions)
       $('slidecaption').update(this.element.down('.activeslide').down('img').readAttribute('title'));
@@ -115,11 +117,11 @@ SupersizeMe = Class.create({
   nextSlide: function() {
     this.switchSlide('next');
   },
-  
+
   previousSlide: function() {
     this.switchSlide('previous');
   },
-  
+
   switchSlide: function (direction) {
     if (this.animating)
       return false;
