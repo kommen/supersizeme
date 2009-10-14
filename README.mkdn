@@ -1,0 +1,24 @@
+SupersizeMe
+===========
+
+Full Screen Background/Slideshow for Prototype
+----------------------------------------------
+
+SupersizeMe is an open source JavaScript class to animate full screen backend image slideshows.
+
+Usage
+-----
+
+See the sample index.html file provided.
+SupersizeMe uses Prototype (http://prototypejs.org/) and Scripty2 (http://scripty2.com/).
+
+Contribute
+----------
+
+Code: http://github.com/kommen/supersizeme/
+Bug reports & feature requests: http://github.com/kommen/supersizeme/issues/
+
+Licence
+-------
+
+SupersizeMe is licensed under the terms of the MIT License, see the included MIT-LICENSE file.
