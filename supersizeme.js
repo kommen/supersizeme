@@ -38,7 +38,7 @@ SupersizeMe = Class.create({
     this.resizeNow();
 
     if (this.options.slideCaptions)
-      $('slidecaption').update(this.element.down('.activeslide').down('img').readAttribute('title'));
+      $('slidecaption').update(this.element.down('.activeslide img').readAttribute('title'));
 
     if (this.options.navigation)
       this.initNaviation();
@@ -92,7 +92,7 @@ SupersizeMe = Class.create({
 
   resizeNow: function() {
     var ratio = this.options.startHeight/this.options.startWidth;
-    var currentImage = this.element.select('.activeslide').first().down('img');
+    var currentImage = this.element.down('.activeslide img');
     var viewportWidth = document.viewport.getDimensions().width, viewportHeight = document.viewport.getDimensions().height;
 
     if ((viewportHeight/viewportWidth) > ratio){
@@ -132,9 +132,8 @@ SupersizeMe = Class.create({
     var currentSlide = prevSlide[direction]()     || this.slides[direction == 'next' ? 'first' : 'last']();
     var nextSlide    = currentSlide[direction]()  || this.slides[direction == 'next' ? 'first' : 'last']();
 
-    if (this.options.slideCounter) {
+    if (this.options.slideCounter)
       $('slidecounter').down('.slidenumber').update(this.slides.indexOf(currentSlide) + 1);
-    }
 
     // missing, add/remove class .prevslide
 
