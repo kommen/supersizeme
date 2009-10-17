@@ -150,16 +150,19 @@ SupersizeMe = Class.create({
 
     currentSlide.addClassName('activeslide');
 
-    // TODO: more options here
-    switch(this.options.transition) {
-      case 'crossfade':
-        prevSlide.fade({ duration: this.options.duration });
-        currentSlide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) });
-        break;
-      default:
-        prevSlide.hide();
-        currentSlide.show();
-    }
+    SupersizeMe.Transitions[this.options.transition].bind(this)(prevSlide, currentSlide);
     this.resizeNow();
   }
 });
+
+SupersizeMe.Transitions = {
+  simple: function(prevSlide, currentSlide) {
+    prevSlide.hide();
+    currentSlide.setOpacity(1).show();
+    this.animating = false;
+  },
+  crossfade: function(prevSlide, currentSlide) {
+    prevSlide.fade({ duration: this.options.duration });
+    currentSlide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) });
+  }
+}
