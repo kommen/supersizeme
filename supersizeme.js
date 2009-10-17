@@ -20,7 +20,7 @@ SupersizeMe = Class.create({
       duration: 2,
       slideCounter: true,
       slideCaptions: true,
-      slideInterval: 3000
+      slideInterval: 3
     }, options);
 
     this.animating  = false;
@@ -111,13 +111,14 @@ SupersizeMe = Class.create({
   play: function() {
     if (!this.paused)
       return false;
-    this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
+    this.slideshowInterval = new PeriodicalExecuter(this.nextSlide.bind(this), this.options.slideInterval);
     this.paused = false;
     $('pauseplay').down('img').src = 'images/pause_dull.gif';
   },
 
   pause: function() {
-    clearInterval(this.slideshowInterval);
+    if (this.slideshowInterval)
+     this.slideshowInterval.stop();
     this.paused = true;
     $('pauseplay').down('img').src = 'images/play_dull.gif';
   },
