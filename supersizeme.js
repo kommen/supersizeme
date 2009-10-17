@@ -144,8 +144,6 @@ SupersizeMe = Class.create({
     if (this.options.slideCounter)
       $('slidecounter').down('.slidenumber').update(this.slides.indexOf(currentSlide) + 1);
 
-    // missing, add/remove class .prevslide
-
     if (this.options.slideCaptions)
       $('slidecaption').update(currentSlide.down('img').readAttribute('title'));
 
