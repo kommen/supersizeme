@@ -24,7 +24,7 @@ SupersizeMe = Class.create({
     }, options);
 
     this.animating  = false;
-    this.paused = false;
+    this.paused = true;
     this.slides = this.element.select('a');
 
     this.slides.invoke('setOpacity', 0);
@@ -61,39 +61,25 @@ SupersizeMe = Class.create({
         $('slidecounter').down('.slidenumber').update(1);
         $('slidecounter').down('.totalslides').update(this.slides.length);
       }
-      this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
+      this.play();
     }
   },
 
   initNaviation: function() {
      $('nextslide').observe('click', function(event) {
-       if(this.paused || this.animating)
-         return false;
-
-       clearInterval(this.slideshowInterval);
-       this.nextSlide();
-       this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
+       if(!this.animating)
+         this.nextSlide();
        return false;
      }.bind(this));
 
      $('prevslide').observe('click', function(event) {
-       if(this.paused || this.animating)
-         return false;
-
-       clearInterval(this.slideshowInterval);
-       this.previousSlide();
-       this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
+       if(!this.animating)
+         this.previousSlide();
        return false;
      }.bind(this));
 
      $('pauseplay').observe('click', function(event) {
-        if (this.paused) {
-          this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
-        } else {
-          clearInterval(this.slideshowInterval);
-        }
-        this.paused = !this.paused;
-        $('pauseplay').down('img').src = this.paused ? 'images/play_dull.gif' : 'images/pause_dull.gif';
+        this.paused ? this.play() : this.pause();
         return false;
      }.bind(this));
   },
@@ -120,6 +106,20 @@ SupersizeMe = Class.create({
       });
     }
     return false;
+  },
+
+  play: function() {
+    if (!this.paused)
+      return false;
+    this.slideshowInterval = setInterval(this.nextSlide.bind(this), this.options.slideInterval);
+    this.paused = false;
+    $('pauseplay').down('img').src = 'images/pause_dull.gif';
+  },
+
+  pause: function() {
+    clearInterval(this.slideshowInterval);
+    this.paused = true;
+    $('pauseplay').down('img').src = 'images/play_dull.gif';
   },
 
   nextSlide: function() {
