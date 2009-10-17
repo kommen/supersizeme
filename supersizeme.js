@@ -17,7 +17,7 @@ SupersizeMe = Class.create({
       slideShow: true,
       navigation: true,
       transition: 'crossfade',
-      duration: 3,
+      duration: 2,
       slideCounter: true,
       slideCaptions: true,
       slideInterval: 3000
