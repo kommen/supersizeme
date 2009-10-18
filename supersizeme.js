@@ -148,9 +148,8 @@ SupersizeMe = Class.create({
       $('slidecaption').update(currentSlide.down('img').readAttribute('title'));
 
     currentSlide.addClassName('activeslide');
-
-    SupersizeMe.Transitions[this.options.transition].bind(this)(prevSlide, currentSlide);
     this.resizeNow();
+    SupersizeMe.Transitions[this.options.transition].bind(this)(prevSlide, currentSlide);
   }
 });
 
@@ -160,8 +159,23 @@ SupersizeMe.Transitions = {
     currentSlide.setOpacity(1).show();
     this.animating = false;
   },
+
   crossfade: function(prevSlide, currentSlide) {
     prevSlide.fade({ duration: this.options.duration });
     currentSlide.appear({ duration: this.options.duration, after: function() { this.animating = false; }.bind(this) });
+  },
+
+  slideright: function(prevSlide, currentSlide) {
+    currentSlide.style.left = "-100%";
+    currentSlide.setOpacity(1).show();
+    prevSlide.morph('left:100%', { duration: this.options.duration, transition: 'easeInOutQuart' });
+    currentSlide.morph('left:0%', { duration: this.options.duration, transition: 'easeInOutQuart', after: function() { this.animating = false; }.bind(this) });
+  },
+
+  slideleft: function(prevSlide, currentSlide) {
+    currentSlide.style.left = "100%";
+    currentSlide.setOpacity(1).show();
+    prevSlide.morph('left:-100%', { duration: this.options.duration, transition: 'easeInOutQuart' });
+    currentSlide.morph('left:0%', { duration: this.options.duration, transition: 'easeInOutQuart', after: function() { this.animating = false; }.bind(this) });
   }
 }
